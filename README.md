@@ -1,50 +1,56 @@
-node-asn1 is a library for encoding and decoding ASN.1 datatypes in pure JS.
-Currently BER encoding is supported; at some point I'll likely have to do DER.
+Node With GraphQL
 
 ## Usage
+Get All Customer Data.
 
-Mostly, if you're *actually* needing to read and write ASN.1, you probably don't
-need this readme to explain what and why.  If you have no idea what ASN.1 is,
-see this: ftp://ftp.rsa.com/pub/pkcs/ascii/layman.asc
+{
+  customers {
+    name,
+    email,
+    age
+  }
+}
+Get Singel Customer Data.
 
-The source is pretty much self-explanatory, and has read/write methods for the
-common types out there.
+{
+  customer(id:"1") {
+    name
+  }
+}
 
-### Decoding
+Update Customer Data.
 
-The following reads an ASN.1 sequence with a boolean.
+mutation{
+  editcustomer(id:"gorbaOA",name:"Manzur",email:"asds@gmail.com",age:22){
+    name,email,age
+  }
+}
 
-    var Ber = require('asn1').Ber;
+Delete Customer Data.
+{
+mutation{
+  deletecustomer(id:"1"){
+    id
+  }
+}
 
-    var reader = new Ber.Reader(new Buffer([0x30, 0x03, 0x01, 0x01, 0xff]));
+Add Customer Data.
+{
+mutation{
+  addcustomer(name:"Manzur",email:"asds@gmail.com",age:12){
+    name,email,age
+  }
+}
 
-    reader.readSequence();
-    console.log('Sequence len: ' + reader.length);
-    if (reader.peek() === Ber.Boolean)
-      console.log(reader.readBoolean());
 
-### Encoding
-
-The following generates the same payload as above.
-
-    var Ber = require('asn1').Ber;
-
-    var writer = new Ber.Writer();
-
-    writer.startSequence();
-    writer.writeBoolean(true);
-    writer.endSequence();
-
-    console.log(writer.buffer);
 
 ## Installation
 
-    npm install asn1
+    npm install
+    npm run runserver //For Run http Server
+    npm run json:server //For run json server
 
 ## License
 
 MIT.
 
-## Bugs
-
-See <https://github.com/mcavage/node-asn1/issues>.
